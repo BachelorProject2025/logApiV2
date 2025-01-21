@@ -77,12 +77,12 @@ public class feedingController {
 
     // Retrieve total amount of milk for a specific date
     @GetMapping("/totalMilk/{date}")
-    public ResponseEntity<Double> getTotalMilk(@PathVariable String date) {
+    public ResponseEntity<String> getTotalMilk(@PathVariable String date) {
         try {
             Firestore firestore = FirestoreClient.getFirestore();
             CollectionReference collection = firestore.collection(COLLECTION_NAME);
 
-            // Query Firestore for records matching the date
+
             Query query = collection.whereEqualTo("date", date);
 
             ApiFuture<QuerySnapshot> querySnapshot = query.get();
@@ -91,8 +91,9 @@ public class feedingController {
             double totalMilk = querySnapshot.get().getDocuments().stream()
                     .mapToDouble(doc -> doc.toObject(FeedingRecord.class).getFeedingAmount())
                     .sum();
+            String response = totalMilk + " Ml";
 
-            return ResponseEntity.ok(totalMilk);
+            return ResponseEntity.ok(response);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
