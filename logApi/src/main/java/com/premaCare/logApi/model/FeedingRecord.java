@@ -33,8 +33,9 @@ public class FeedingRecord {
 
     @NotNull
     private String comments;
+}
 
-
+/*
     @Data
     public class feedingRecord {
         private String id;
@@ -48,6 +49,6 @@ public class FeedingRecord {
         private String comments;
     }
 
-}
+}*/
 
 
