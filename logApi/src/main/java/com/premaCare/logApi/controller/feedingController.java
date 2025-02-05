@@ -1,15 +1,14 @@
 package com.premaCare.logApi.controller;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.Query;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.premaCare.logApi.model.FeedingRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -33,11 +32,20 @@ public class feedingController {
             Firestore firestore = FirestoreClient.getFirestore();
             CollectionReference collection = firestore.collection(COLLECTION_NAME);
 
-            // Add the record to Firestore, Firestore will auto-generate the ID
-            ApiFuture<com.google.cloud.firestore.DocumentReference> future = collection.add(record);
-            com.google.cloud.firestore.DocumentReference docRef = future.get();
+            // Generate keywords for searching by first name, last name, or full name
+            String[] nameParts = record.getBabyName().split(" ");
+            List<String> keywords = new ArrayList<>();
+            keywords.add(record.getBabyName()); // Full name
+            keywords.addAll(Arrays.asList(nameParts)); // Individual name parts
 
-            // Set the ID in the FeedingRecord object after it's been saved
+            // Add keywords to the record
+            record.setBabyNameKeywords(keywords);
+
+            // Add the record to Firestore, Firestore will auto-generate the ID
+            ApiFuture<DocumentReference> future = collection.add(record);
+            DocumentReference docRef = future.get();
+
+            // Set the Firestore-generated ID in the FeedingRecord object
             record.setId(docRef.getId());
 
             return ResponseEntity.ok("Record added successfully");
@@ -46,6 +54,7 @@ public class feedingController {
             return ResponseEntity.status(500).body("Failed to add record: " + e.getMessage());
         }
     }
+
 
 
     // Retrieve all feeding records from Firestore
@@ -99,6 +108,32 @@ public class feedingController {
             return ResponseEntity.status(500).build();
         }
     }
+
+    @GetMapping("/totalMilk/{date}/{babyName}")
+    public ResponseEntity<String> getTotalMilk(@PathVariable String date, @PathVariable String babyName) {
+        try {
+            Firestore firestore = FirestoreClient.getFirestore();
+            CollectionReference collection = firestore.collection(COLLECTION_NAME);
+
+            // Query Firestore for records matching the date and baby name
+            Query query = collection
+                    .whereEqualTo("date", date)
+                    .whereArrayContains("babyNameKeywords", babyName); // Matches any part of the name
+
+            ApiFuture<QuerySnapshot> querySnapshot = query.get();
+
+            double totalMilk = querySnapshot.get().getDocuments().stream()
+                    .mapToDouble(doc -> doc.toObject(FeedingRecord.class).getFeedingAmount())
+                    .sum();
+
+            return ResponseEntity.ok(totalMilk + " ml");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error fetching total milk: " + e.getMessage());
+        }
+    }
+
+
 
 }
 

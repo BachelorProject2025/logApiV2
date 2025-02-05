@@ -1,9 +1,8 @@
 package com.premaCare.logApi.model;
 
-
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import java.util.List;
 
 @Data
 public class FeedingRecord {
@@ -33,22 +32,10 @@ public class FeedingRecord {
 
     @NotNull
     private String comments;
+
+    @NotNull
+    private String babyName;
+
+    private List<String> babyNameKeywords; // Field for partial search
 }
-
-/*
-    @Data
-    public class feedingRecord {
-        private String id;
-        private String feedingTime;
-        private String feedingMethod;
-        private Double feedingAmount;
-        private Double weight;
-        private String date;
-        private Boolean pee;
-        private Boolean poop;
-        private String comments;
-    }
-
-}*/
-
 
