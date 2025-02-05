@@ -15,13 +15,14 @@ Endpoints
 	•	Request Body:
 
 {
-  "feedingTime": "2025-01-19T10:30:00",
+  "feedingTime": "12:13",
   "feedingMethod": "bottle",
-  "weight": 3.2,
-  "date": "2025-01-19",
+  "feedingAmount": 90.00,
+  "weight": 4.8,
+  "date": "2025-02-22",
   "pee": true,
   "poop": true,
-  "comments": "Baby feeding well."
+  "comments": "All good"                    
 }
 
 
@@ -30,13 +31,14 @@ Endpoints
 curl -X POST http://localhost:8080/api/feeding \
 -H "Content-Type: application/json" \
 -d '{
-  "feedingTime": "2025-01-19T10:30:00",
+  "feedingTime": "12:13",
   "feedingMethod": "bottle",
-  "weight": 3.2,
-  "date": "2025-01-19",
+  "feedingAmount": 90.00,
+  "weight": 4.8,
+  "date": "2025-02-22",
   "pee": true,
   "poop": true,
-  "comments": "Baby feeding well."
+  "comments": "All good"                    
 }'
 
 2. Get All Feeding Records
