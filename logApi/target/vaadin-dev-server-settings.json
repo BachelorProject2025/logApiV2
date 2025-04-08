@@ -1,0 +1,17 @@
+{
+  "frontendFolder": "/Volumes/T7/bachelor2025/logApiV2/logApi/./frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "/Volumes/T7/bachelor2025/logApiV2/logApi/./frontend/generated/jar-resources",
+  "staticOutput": "/Volumes/T7/bachelor2025/logApiV2/logApi/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "/Volumes/T7/bachelor2025/logApiV2/logApi/target/classes/META-INF/VAADIN/config",
+  "frontendBundleOutput": "/Volumes/T7/bachelor2025/logApiV2/logApi/target/classes/META-INF/VAADIN/webapp",
+  "devBundleOutput": "/Volumes/T7/bachelor2025/logApiV2/logApi/src/main/dev-bundle/webapp",
+  "devBundleStatsOutput": "/Volumes/T7/bachelor2025/logApiV2/logApi/src/main/dev-bundle/config",
+  "jarResourcesFolder": "/Volumes/T7/bachelor2025/logApiV2/logApi/./frontend/generated/jar-resources",
+  "themeName": "",
+  "clientServiceWorkerSource": "/Volumes/T7/bachelor2025/logApiV2/logApi/target/sw.ts",
+  "pwaEnabled": false,
+  "offlineEnabled": false,
+  "offlinePath": "'offline.html'"
+}
