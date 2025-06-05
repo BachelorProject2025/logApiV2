@@ -8,10 +8,13 @@ import com.premaCare.logApi.model.Message;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api")
 public class feedingController {
@@ -157,6 +160,40 @@ public class feedingController {
             return ResponseEntity.status(500).body("Failed to send message");
         }
     }
+
+    @GetMapping("/searchChild")
+    public ResponseEntity<List<Map<String, Object>>> searchChild(@RequestParam String name) {
+        try {
+            CollectionReference usersRef = firestore.collection("users");
+
+            // Query based on the correct field: 'childsName'
+            Query query = usersRef.whereEqualTo("childsName", name.trim());
+
+            ApiFuture<QuerySnapshot> future = query.get();
+            List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+            List<Map<String, Object>> results = new ArrayList<>();
+
+            for (QueryDocumentSnapshot doc : documents) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("userId", doc.getId());
+                data.put("childsName", doc.get("childsName"));
+                data.put("childDateOfBirth", doc.get("childDateOfBirth"));
+                data.put("email", doc.get("email"));
+                data.put("parentName", doc.get("parentName"));
+                data.put("parentNumber", doc.get("parentNumber"));
+                results.add(data);
+            }
+
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+
+
 }
 
 

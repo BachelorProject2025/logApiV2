@@ -15,7 +15,7 @@ public class LogApiApplication {
 		// Initialize Firebase
 		FirebaseOptions options = FirebaseOptions.builder()
 				.setCredentials(GoogleCredentials.fromStream(
-						new FileInputStream("/Volumes/T7/bachelor2025/logApiV2/logApi/src/main/resources/premacare-75bc7-firebase-adminsdk-fbsvc-999d0be7c2.json")
+						new FileInputStream("logApi/src/main/resources/premacare-75bc7-firebase-adminsdk-fbsvc-999d0be7c2.json")
 				))
 				.build();
 		FirebaseApp.initializeApp(options);
