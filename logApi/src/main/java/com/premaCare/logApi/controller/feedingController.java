@@ -142,9 +142,33 @@ public class feedingController {
     }
 
     // Send a message to a user
+  // @PostMapping("/messages/{userId}")
+  // public ResponseEntity<String> sendMessage(@PathVariable String userId, @RequestBody Message message) {
+  //     try {
+  //         // Get the reference to the user's messages subcollection
+  //         CollectionReference collection = firestore.collection(USERS_COLLECTION_NAME)
+  //                 .document(userId)
+  //                 .collection(MESSAGE_COLLECTION_NAME);
+
+  //         // Add the message to the Firestore subcollection
+  //         ApiFuture<DocumentReference> future = collection.add(message);
+  //         future.get(); // Wait for completion
+
+  //         return ResponseEntity.ok("Message sent successfully");
+  //     } catch (ExecutionException | InterruptedException e) {
+  //         e.printStackTrace();
+  //         return ResponseEntity.status(500).body("Failed to send message");
+  //     }
+  // }
+
     @PostMapping("/messages/{userId}")
     public ResponseEntity<String> sendMessage(@PathVariable String userId, @RequestBody Message message) {
         try {
+            // Set isRead to false if it's null (i.e., not sent from client)
+            if (message.getIsRead() == null) {
+                message.setIsRead(false);
+            }
+
             // Get the reference to the user's messages subcollection
             CollectionReference collection = firestore.collection(USERS_COLLECTION_NAME)
                     .document(userId)
