@@ -164,19 +164,18 @@ public class feedingController {
     @PostMapping("/messages/{userId}")
     public ResponseEntity<String> sendMessage(@PathVariable String userId, @RequestBody Message message) {
         try {
-            // Set isRead to false if it's null (i.e., not sent from client)
-            if (message.getIsRead() == null) {
-                message.setIsRead(false);
-            }
+            // Tving isRead til false for nye meldinger sendt via dette endepunktet.
+            // Dette garanterer at alle nye meldinger fra sykepleier er uleste når de legges til i Firebase.
+            message.setIsRead(false); // <--- KUN DENNE LINJEN ER BEHOLDT OG ENDRET
 
-            // Get the reference to the user's messages subcollection
+            // Hent referansen til brukerens meldings-underkolleksjon
             CollectionReference collection = firestore.collection(USERS_COLLECTION_NAME)
                     .document(userId)
                     .collection(MESSAGE_COLLECTION_NAME);
 
-            // Add the message to the Firestore subcollection
+            // Legg til meldingen i Firestore-underkolleksjonen
             ApiFuture<DocumentReference> future = collection.add(message);
-            future.get(); // Wait for completion
+            future.get(); // Vent på fullførelse
 
             return ResponseEntity.ok("Message sent successfully");
         } catch (ExecutionException | InterruptedException e) {
